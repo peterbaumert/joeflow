@@ -174,7 +174,7 @@ class Workflow(models.Model, metaclass=WorkflowBase):
 
     @classmethod
     def get_url_namespace(cls):
-        return cls.__name__.lower()
+        return f"{cls._meta.app_label}:{cls.__name__.lower()}"
 
     def get_absolute_url(self):
         """Return URL to workflow detail view."""
@@ -561,7 +561,7 @@ class Task(models.Model):
                 possible edges.
 
         """
-        if next_nodes is None:
+        if next_nodes is None or next_nodes == [None]:
             next_nodes = self.workflow.get_next_nodes(self.node)
         tasks = []
         for node in next_nodes:
